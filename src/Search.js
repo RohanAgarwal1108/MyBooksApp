@@ -24,9 +24,9 @@ finder=(query)=>{
       img_url:response.imageLinks.thumbnail
     }])
     )
-    this.setState(()=>({
+    this.setState({
       searchedBooks:myvar
-    }))
+    })
   })
 }
  render(){
