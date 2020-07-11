@@ -196,3 +196,10 @@ button:active {
   text-align: center;
   font-size: 0.8em;
 }
+
+/* handling search message */
+
+.message{
+  color:gray;
+  text-align: center;
+}

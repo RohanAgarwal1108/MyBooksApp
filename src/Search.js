@@ -10,6 +10,7 @@ class Search extends Component{
     this.state={
       query:'',
       searchedBooks:[],
+      message:0
     }
   }
 
@@ -19,8 +20,9 @@ class Search extends Component{
       this.setState(()=>({query:''}))
       this.setState(()=>({
         // when there is no book results
-        searchedBooks:[] 
+        searchedBooks:[]
       }))
+      this.setState({message:0})
     }
     else{
       this.setState({ query: query })
@@ -45,15 +47,18 @@ finder = (query) => {
       console.log("fresponses", fresponses);
       if (fresponses.length !== 0) {
         const fresponses1=this.setshelf(fresponses);
+        this.setState({message:2})
         this.setState({ searchedBooks: fresponses1 });
       } else {
         this.setState(() => ({
           searchedBooks: [],
+          message:1
         }));
       }
     } else {
       this.setState(() => ({
         searchedBooks: [],
+        message:1
       }));
     }
   });
@@ -85,8 +90,11 @@ setshelf=(fresponses)=>
             <input type="text" value={query} placeholder="Search by title or author" onChange={(event)=>{this.updateQuery(event.target.value)}}/>
           </div>
         </div>
+        
         <div className="search-books-results">
-          <Book bookUpdate={this.props.bookUpdate} book_list={this.state.searchedBooks}/>
+        {this.state.message===2?(
+          <Book bookUpdate={this.props.bookUpdate} book_list={this.state.searchedBooks}/>):this.state.message===1?(<p className='message'>Please try another search term</p>):
+          (<p className='message'>Make a search</p>)}
         </div>
       </div>);
     }

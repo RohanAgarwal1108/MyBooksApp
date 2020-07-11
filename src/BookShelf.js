@@ -15,7 +15,7 @@ class BookShelf extends Component {
                   {shelf.map((shelf_item)=>
                     booklist.filter((book)=>book.shelf===shelf_item).length!==0?(
                       <div className="bookshelf" key={shelf_item}>
-                      <h2 className="bookshelf-title">{shelf_item}</h2>
+                      <h2 className="bookshelf-title">{shelf_item==='currentlyReading'?('Currently Reading'):shelf_item==='wantToRead'?'Want to Read':'Read'}</h2>
                   <Book bookUpdate={this.props.bookUpdate} book_list={booklist.filter((book)=>book.shelf===shelf_item)}/></div>
                     ):(<div className="bookshelf" key={shelf_item }></div>)
                     )}
