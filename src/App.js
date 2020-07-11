@@ -22,11 +22,11 @@ class BooksApp extends React.Component {
     this.setState({ showSearchPage: false });
   }
 
-  updateBook = (targetBook, newShelf) => {
+  updateBook =async (targetBook, newShelf) => {
     const id=targetBook.id;
     const elementsIndex = this.state.books.findIndex(book => book.id === targetBook.id ) 
     let newArray = this.state.books
-    BooksAPI.update(targetBook, newShelf).then(()=>{
+    await BooksAPI.update(targetBook, newShelf)
       BooksAPI.get(id)
       .then((res)=>{
         newArray[elementsIndex] = res;
@@ -34,7 +34,6 @@ class BooksApp extends React.Component {
           books: newArray,
         })
       })
-    })
     /*
     BooksAPI.update(targetBook, newShelf).then(()=>{
     BooksAPI.getAll()

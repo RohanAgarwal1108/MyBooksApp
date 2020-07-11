@@ -22,17 +22,19 @@ class Search extends Component{
       }))
     }
     else{
-      this.setState(() => ({ query: query }), () => this.finder(query))
+      this.setState({ query: query })
+      this.finder(query)
   }
 }
 
-finder=(query)=>{
+/*finder=(query)=>{
   BooksAPI.search(query)
   .then((responses)=>{
-    console.log(responses);
+    console.log("response",responses);
     if (query !== this.state.query) {return;}
     if(responses.error !== 'empty query' ){
       let fresponses=responses.filter((response)=>{ return response.hasOwnProperty('imageLinks') && response.hasOwnProperty('authors') && response.imageLinks.hasOwnProperty('thumbnail')});
+      console.log("fresponses", fresponses);
       if(fresponses.length!==0){
         const newresp=fresponses.map((fresponse)=>{
           if(!fresponse.hasOwnProperty('shelf')){
@@ -43,6 +45,7 @@ finder=(query)=>{
           else{return fresponse.id;}
         })
         const toState=newresp.map((newres)=>BooksAPI.get(newres));
+        console.log("toState", toState)
         this.setState({searchedBooks:toState});
       }
     else{
@@ -56,7 +59,37 @@ finder=(query)=>{
       }))
     }
   })
-}
+}*/
+
+finder = (query) => {
+  BooksAPI.search(query).then((responses) => {
+    console.log(responses);
+    if (query !== this.state.query) {
+      return;
+    }
+    if (responses.error !== "empty query") {
+      let fresponses = responses.filter((response) => {
+        return (
+          response.hasOwnProperty("imageLinks") &&
+          response.hasOwnProperty("authors") &&
+          response.imageLinks.hasOwnProperty("thumbnail")
+        );
+      });
+      console.log("fresponses", fresponses);
+      if (fresponses.length !== 0) {
+        this.setState({ searchedBooks: fresponses });
+      } else {
+        this.setState(() => ({
+          searchedBooks: [],
+        }));
+      }
+    } else {
+      this.setState(() => ({
+        searchedBooks: [],
+      }));
+    }
+  });
+};
 
  render(){
    const query=this.state.query;
