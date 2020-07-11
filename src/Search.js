@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI'
+import Book from './Book';
 
 class Search extends Component{
+
   constructor(props){
     super(props);
     this.state={
@@ -9,26 +11,70 @@ class Search extends Component{
       searchedBooks:[],
     }
   }
+
   updateQuery=(query)=>{
-    this.setState(()=>({query:query.trim()}))
-    this.finder(query.trim());
+    if(query===null||query==='')
+    {
+      this.setState(()=>({query:''}))
+      this.setState(()=>({
+        // when there is no book results
+        searchedBooks:[] 
+      }))
+    }
+    else{
+    this.setState(()=>({query:query}))
+    this.finder(query);
+  }
 }
+
 finder=(query)=>{
   BooksAPI.search(query)
   .then((responses)=>{
-    let myvar=[]
-    responses.map((response)=>
-    myvar.concat([{
-      name:response.title,
-      author:response.authors,
-      img_url:response.imageLinks.thumbnail
-    }])
-    )
+    console.log(responses);
+    if(responses.error !== 'empty query' ){
+      let fresponses=responses.filter((response)=>{ return response.hasOwnProperty('imageLinks') && response.hasOwnProperty('authors') && response.imageLinks.hasOwnProperty('thumbnail')});
+      if(fresponses.length!==0){
+      let newBooks=[]
+    newBooks = fresponses.map((fresponse) =>({
+      name: fresponse.title,
+      author: fresponse.authors,
+      img_url: `url(${fresponse.imageLinks.thumbnail})`,
+      status:'None',
+      id:fresponse.id
+    }))
+    //let myvar1=this.stateChanger(newBooks);
     this.setState({
-      searchedBooks:myvar
-    })
+      //searchedBooks:myvar1
+      searchedBooks:newBooks
+    })}
+    else{
+      this.setState(()=>({
+        searchedBooks:[] 
+      }))
+    }
+    }else{
+      this.setState(()=>({
+        searchedBooks:[] 
+      }))
+    }
   })
 }
+
+/*stateChanger=(newBooks)=>{
+  const newsearchedBooks=newBooks;
+  const {booklist}=this.props;
+  let myvar1=newsearchedBooks.map((newsearchedBooks_item)=>
+  booklist.map((booklist_item)=>{if(booklist_item.id===newsearchedBooks_item.id){
+    newsearchedBooks_item.status=booklist_item.status;
+    return newsearchedBooks_item;
+  }
+  return newsearchedBooks_item;
+}
+  )
+  )
+  return myvar1;
+}*/
+
  render(){
    const query=this.state.query;
       const {handleSearch}=this.props;
@@ -40,9 +86,7 @@ finder=(query)=>{
           </div>
         </div>
         <div className="search-books-results">
-          {this.state.searchedBooks.length!==0 ? JSON.stringify(this.state.searchedBooks): JSON.stringify(this.state)}
-          <ol className="books-grid">
-          </ol>
+          <Book bookUpdate={this.props.bookUpdate} book_list={this.state.searchedBooks}/>
         </div>
       </div>);
     }

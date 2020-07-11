@@ -9,22 +9,25 @@ class BooksApp extends React.Component {
   state = {
     books:[
       {
-        name:'To kill a Mockingbird',
-        author:'Harper Lee',
-        img_url:'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")',
-        status:'Currently Reading'
+        name:'Best Android Apps',
+        author: ["Mike Hendrickson", "Brian Sawyer"],
+        img_url:'url("http://books.google.com/books/content?id=bUybAgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api")',
+        status:'Currently Reading',
+        id:'bUybAgAAQBAJ'
       },
       {
         name:'Ender\'s Game',
         author:'Orson Scott Card',
         img_url:'url("http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api")',
-        status:'Want to Read'
+        status:'Want to Read',
+        id:'2'
       },
       {
         name:'Harry Potter & the Sorcerer\'s Stone',
         author:'J.K. Rowling',
         img_url:'url("http://books.google.com/books/content?id=wrOQLV6xB-wC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72G3gA5A-Ka8XjOZGDFLAoUeMQBqZ9y-LCspZ2dzJTugcOcJ4C7FP0tDA8s1h9f480ISXuvYhA_ZpdvRArUL-mZyD4WW7CHyEqHYq9D3kGnrZCNiqxSRhry8TiFDCMWP61ujflB&source=gbs_api")',
-        status:'Read'
+        status:'Read',
+        id:'3'
       },
     ],
     showSearchPage: false
@@ -44,7 +47,7 @@ class BooksApp extends React.Component {
     return(
       <div className="app">
       {this.state.showSearchPage ? (
-        <Search handleSearch={this.searchHandling}/>
+        <Search handleSearch={this.searchHandling} bookUpdate={this.updateBook} booklist={this.state.books}/>
       ) : (
         <BookShelf bookUpdate={this.updateBook} booklist={this.state.books}/>)}
          <div className="open-search">
