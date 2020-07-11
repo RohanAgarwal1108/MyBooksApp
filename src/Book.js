@@ -10,19 +10,19 @@ class Book extends Component{
                       <li key={book_list_item.id}>
                         <div className="book">
                           <div className="book-top">
-                            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage:book_list_item.img_url }}></div>
+                            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage:`url(${book_list_item.imageLinks.thumbnail}`}}></div>
                             <div className="book-shelf-changer">
-                              <select value={book_list_item.status} onChange={(event)=>bookUpdate(book_list_item, event.target.value)}>
+                              <select value={book_list_item.shelf} onChange={(event)=>bookUpdate(book_list_item, event.target.value)}>
                                 <option value="move" disabled>Move to...</option>
-                                <option value="Currently Reading">Currently Reading</option>
-                                <option value="Want to Read">Want to Read</option>
-                                <option value="Read">Read</option>
-                                <option value="None">None</option>
+                                <option value="currentlyReading">Currently Reading</option>
+                                <option value="wantToRead">Want to Read</option>
+                                <option value="read">Read</option>
+                                <option value="none">None</option>
                               </select>
                             </div>
                           </div>
-                          <div className="book-title">{book_list_item.name}</div>
-                          <div className="book-authors">{book_list_item.author}</div>
+                          <div className="book-title">{book_list_item.title}</div>
+                          <div className="book-authors">{book_list_item.authors}</div>
                         </div>
                       </li>)}
                     </ol>

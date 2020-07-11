@@ -29,23 +29,22 @@ class Search extends Component{
 finder=(query)=>{
   BooksAPI.search(query)
   .then((responses)=>{
-    if (query !== this.state.query) return;
+    console.log(responses);
+    if (query !== this.state.query) {return;}
     if(responses.error !== 'empty query' ){
       let fresponses=responses.filter((response)=>{ return response.hasOwnProperty('imageLinks') && response.hasOwnProperty('authors') && response.imageLinks.hasOwnProperty('thumbnail')});
       if(fresponses.length!==0){
-      let newBooks=[]
-    newBooks = fresponses.map((fresponse) =>({
-      name: fresponse.title,
-      author: fresponse.authors,
-      img_url: `url(${fresponse.imageLinks.thumbnail})`,
-      status:'None',
-      id:fresponse.id
-    }))
-    let myvar1=this.stateChanger(newBooks);
-    this.setState({
-      searchedBooks:myvar1
-      //searchedBooks:newBooks
-    })}
+        const newresp=fresponses.map((fresponse)=>{
+          if(!fresponse.hasOwnProperty('shelf')){
+            let id=fresponse.id;
+            BooksAPI.update(fresponse, 'none');
+            return id;
+          }
+          else{return fresponse.id;}
+        })
+        const toState=newresp.map((newres)=>BooksAPI.get(newres));
+        this.setState({searchedBooks:toState});
+      }
     else{
       this.setState(()=>({
         searchedBooks:[] 
@@ -57,20 +56,6 @@ finder=(query)=>{
       }))
     }
   })
-}
-
-stateChanger=(newBooks)=>{
-  const newsearchedBooks=newBooks;
-  const {booklist}=this.props;
-  let myvar1 = newsearchedBooks.map((newsearchedBooks_item) => {
-    booklist.forEach((booklist_item)=>{
-      if(booklist_item.id===newsearchedBooks_item.id){
-        newsearchedBooks_item.status=booklist_item.status;
-      }
-    });
-    return newsearchedBooks_item;
-  })
-  return myvar1;
 }
 
  render(){
