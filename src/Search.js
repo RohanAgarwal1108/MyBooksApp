@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI'
 import Book from './Book';
+import { Link } from 'react-router-dom';
 
 class Search extends Component{
 
@@ -79,7 +80,7 @@ setshelf=(fresponses)=>
       const {handleSearch}=this.props;
         return(<div className="search-books">
         <div className="search-books-bar">
-          <button className="close-search" onClick={()=>handleSearch()}>Close</button>
+        <Link to='/'><button className="close-search" onClick={()=>handleSearch()}>Close</button></Link>
           <div className="search-books-input-wrapper">
             <input type="text" value={query} placeholder="Search by title or author" onChange={(event)=>{this.updateQuery(event.target.value)}}/>
           </div>
