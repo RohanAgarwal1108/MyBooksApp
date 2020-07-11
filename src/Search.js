@@ -27,40 +27,6 @@ class Search extends Component{
   }
 }
 
-/*finder=(query)=>{
-  BooksAPI.search(query)
-  .then((responses)=>{
-    console.log("response",responses);
-    if (query !== this.state.query) {return;}
-    if(responses.error !== 'empty query' ){
-      let fresponses=responses.filter((response)=>{ return response.hasOwnProperty('imageLinks') && response.hasOwnProperty('authors') && response.imageLinks.hasOwnProperty('thumbnail')});
-      console.log("fresponses", fresponses);
-      if(fresponses.length!==0){
-        const newresp=fresponses.map((fresponse)=>{
-          if(!fresponse.hasOwnProperty('shelf')){
-            let id=fresponse.id;
-            BooksAPI.update(fresponse, 'none');
-            return id;
-          }
-          else{return fresponse.id;}
-        })
-        const toState=newresp.map((newres)=>BooksAPI.get(newres));
-        console.log("toState", toState)
-        this.setState({searchedBooks:toState});
-      }
-    else{
-      this.setState(()=>({
-        searchedBooks:[] 
-      }))
-    }
-    }else{
-      this.setState(()=>({
-        searchedBooks:[] 
-      }))
-    }
-  })
-}*/
-
 finder = (query) => {
   BooksAPI.search(query).then((responses) => {
     console.log(responses);
@@ -77,7 +43,8 @@ finder = (query) => {
       });
       console.log("fresponses", fresponses);
       if (fresponses.length !== 0) {
-        this.setState({ searchedBooks: fresponses });
+        const fresponses1=this.setshelf(fresponses);
+        this.setState({ searchedBooks: fresponses1 });
       } else {
         this.setState(() => ({
           searchedBooks: [],
@@ -90,6 +57,22 @@ finder = (query) => {
     }
   });
 };
+
+setshelf=(fresponses)=>
+{
+  const {booklist}=this.props;
+  const fresponses1=fresponses.map((fresponse)=>{
+    const elementsIndex = booklist.findIndex(book => book.id === fresponse.id )
+    if(elementsIndex!==-1)
+    {
+      return fresponse= {...fresponse, shelf: booklist[elementsIndex].shelf}
+    }
+    else{
+      return fresponse= {...fresponse, shelf: 'none'}
+    }
+    })
+    return fresponses1;
+}
 
  render(){
    const query=this.state.query;
