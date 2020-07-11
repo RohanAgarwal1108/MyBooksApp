@@ -22,15 +22,14 @@ class Search extends Component{
       }))
     }
     else{
-    this.setState(()=>({query:query}))
-    this.finder(query);
+      this.setState(() => ({ query: query }), () => this.finder(query))
   }
 }
 
 finder=(query)=>{
   BooksAPI.search(query)
   .then((responses)=>{
-    console.log(responses);
+    if (query !== this.state.query) return;
     if(responses.error !== 'empty query' ){
       let fresponses=responses.filter((response)=>{ return response.hasOwnProperty('imageLinks') && response.hasOwnProperty('authors') && response.imageLinks.hasOwnProperty('thumbnail')});
       if(fresponses.length!==0){
@@ -42,10 +41,10 @@ finder=(query)=>{
       status:'None',
       id:fresponse.id
     }))
-    //let myvar1=this.stateChanger(newBooks);
+    let myvar1=this.stateChanger(newBooks);
     this.setState({
-      //searchedBooks:myvar1
-      searchedBooks:newBooks
+      searchedBooks:myvar1
+      //searchedBooks:newBooks
     })}
     else{
       this.setState(()=>({
@@ -60,20 +59,19 @@ finder=(query)=>{
   })
 }
 
-/*stateChanger=(newBooks)=>{
+stateChanger=(newBooks)=>{
   const newsearchedBooks=newBooks;
   const {booklist}=this.props;
-  let myvar1=newsearchedBooks.map((newsearchedBooks_item)=>
-  booklist.map((booklist_item)=>{if(booklist_item.id===newsearchedBooks_item.id){
-    newsearchedBooks_item.status=booklist_item.status;
+  let myvar1 = newsearchedBooks.map((newsearchedBooks_item) => {
+    booklist.forEach((booklist_item)=>{
+      if(booklist_item.id===newsearchedBooks_item.id){
+        newsearchedBooks_item.status=booklist_item.status;
+      }
+    });
     return newsearchedBooks_item;
-  }
-  return newsearchedBooks_item;
-}
-  )
-  )
+  })
   return myvar1;
-}*/
+}
 
  render(){
    const query=this.state.query;
